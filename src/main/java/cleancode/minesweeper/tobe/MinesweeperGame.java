@@ -15,14 +15,7 @@ public class MinesweeperGame {
         Scanner scanner = new Scanner(System.in);
         initializeGame();
         while (true) {
-            System.out.println("   a b c d e f g h i j");
-            for (int row = 0; row < 8; row++) {
-                System.out.printf("%d  ", row + 1);
-                for (int col = 0; col < 10; col++) {
-                    System.out.print(board[row][col] + " ");
-                }
-                System.out.println();
-            }
+            showBoard();
             if (gameStatus == 1) {
                 System.out.println("지뢰를 모두 찾았습니다. GAME CLEAR!");
                 break;
@@ -31,63 +24,17 @@ public class MinesweeperGame {
                 System.out.println("지뢰를 밟았습니다. GAME OVER!");
                 break;
             }
-            System.out.println();
             System.out.println("선택할 좌표를 입력하세요. (예: a1)");
             String cellInput = scanner.nextLine();
             System.out.println("선택한 셀에 대한 행위를 선택하세요. (1: 오픈, 2: 깃발 꽂기)");
             String userActionInput = scanner.nextLine();
             char cellInputCol = cellInput.charAt(0);
             char cellInputRow = cellInput.charAt(1);
-            int selectedColIndex;
-            switch (cellInputCol) {
-                case 'a':
-                    selectedColIndex = 0;
-                    break;
-                case 'b':
-                    selectedColIndex = 1;
-                    break;
-                case 'c':
-                    selectedColIndex = 2;
-                    break;
-                case 'd':
-                    selectedColIndex = 3;
-                    break;
-                case 'e':
-                    selectedColIndex = 4;
-                    break;
-                case 'f':
-                    selectedColIndex = 5;
-                    break;
-                case 'g':
-                    selectedColIndex = 6;
-                    break;
-                case 'h':
-                    selectedColIndex = 7;
-                    break;
-                case 'i':
-                    selectedColIndex = 8;
-                    break;
-                case 'j':
-                    selectedColIndex = 9;
-                    break;
-                default:
-                    selectedColIndex = -1;
-                    break;
-            }
-            int selectedRowIndex = Character.getNumericValue(cellInputRow) - 1;
+            int selectedColIndex = convertColFrom(cellInputCol);
+            int selectedRowIndex = convertRowFrom(cellInputRow);
             if (userActionInput.equals("2")) {
                 board[selectedRowIndex][selectedColIndex] = "⚑";
-                boolean isAllOpened = true;
-                for (int row = 0; row < 8; row++) {
-                    for (int col = 0; col < 10; col++) {
-                        if (board[row][col].equals("□")) {
-                            isAllOpened = false;
-                        }
-                    }
-                }
-                if (isAllOpened) {
-                    gameStatus = 1;
-                }
+                checkGameIsOver();
             } else if (userActionInput.equals("1")) {
                 if (landMines[selectedRowIndex][selectedColIndex]) {
                     board[selectedRowIndex][selectedColIndex] = "☼";
@@ -96,20 +43,84 @@ public class MinesweeperGame {
                 } else {
                     open(selectedRowIndex, selectedColIndex);
                 }
-                boolean isAllOpened = true;
-                for (int row = 0; row < 8; row++) {
-                    for (int col = 0; col < 10; col++) {
-                        if (board[row][col].equals("□")) {
-                            isAllOpened = false;
-                        }
-                    }
-                }
-                if (isAllOpened) {
-                    gameStatus = 1;
-                }
+                checkGameIsOver();
             } else {
                 System.out.println("잘못된 번호를 선택하셨습니다.");
             }
+        }
+    }
+
+    private static void checkGameIsOver() {
+        boolean isAllOpened = isAllCellOpened();
+        if (isAllOpened) {
+            gameStatus = 1;
+        }
+    }
+
+    private static boolean isAllCellOpened() {
+        boolean isAllOpened = true;
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 10; col++) {
+                if (board[row][col].equals("□")) {
+                    isAllOpened = false;
+                }
+            }
+        }
+        return isAllOpened;
+    }
+
+    private static int convertRowFrom(char cellInputRow) {
+        return Character.getNumericValue(cellInputRow) - 1;
+    }
+
+    private static int convertColFrom(char cellInputCol) {
+        int selectedColIndex;
+        switch (cellInputCol) {
+            case 'a':
+                selectedColIndex = 0;
+                break;
+            case 'b':
+                selectedColIndex = 1;
+                break;
+            case 'c':
+                selectedColIndex = 2;
+                break;
+            case 'd':
+                selectedColIndex = 3;
+                break;
+            case 'e':
+                selectedColIndex = 4;
+                break;
+            case 'f':
+                selectedColIndex = 5;
+                break;
+            case 'g':
+                selectedColIndex = 6;
+                break;
+            case 'h':
+                selectedColIndex = 7;
+                break;
+            case 'i':
+                selectedColIndex = 8;
+                break;
+            case 'j':
+                selectedColIndex = 9;
+                break;
+            default:
+                selectedColIndex = -1;
+                break;
+        }
+        return selectedColIndex;
+    }
+
+    private static void showBoard() {
+        System.out.println("   a b c d e f g h i j");
+        for (int row = 0; row < 8; row++) {
+            System.out.printf("%d  ", row + 1);
+            for (int col = 0; col < 10; col++) {
+                System.out.print(board[row][col] + " ");
+            }
+            System.out.println();
         }
     }
 
