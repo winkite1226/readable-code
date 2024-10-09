@@ -11,54 +11,9 @@ public class MinesweeperGame {
     private static int gameStatus = 0; // 0: 게임 중, 1: 승리, -1: 패배
 
     public static void main(String[] args) {
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        System.out.println("지뢰찾기 게임 시작!");
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        showGameStartComments();
         Scanner scanner = new Scanner(System.in);
-        for (int row = 0; row < 8; row++) {
-            for (int col = 0; col < 10; col++) {
-                board[row][col] = "□";
-            }
-        }
-        for (int i = 0; i < 10; i++) {
-            int col = new Random().nextInt(10);
-            int row = new Random().nextInt(8);
-            landMines[row][col] = true;
-        }
-        for (int row = 0; row < 8; row++) {
-            for (int col = 0; col < 10; col++) {
-                int count = 0;
-                if (!landMines[row][col]) {
-                    if (row - 1 >= 0 && col - 1 >= 0 && landMines[row - 1][col - 1]) {
-                        count++;
-                    }
-                    if (row - 1 >= 0 && landMines[row - 1][col]) {
-                        count++;
-                    }
-                    if (row - 1 >= 0 && col + 1 < 10 && landMines[row - 1][col + 1]) {
-                        count++;
-                    }
-                    if (col - 1 >= 0 && landMines[row][col - 1]) {
-                        count++;
-                    }
-                    if (col + 1 < 10 && landMines[row][col + 1]) {
-                        count++;
-                    }
-                    if (row + 1 < 8 && col - 1 >= 0 && landMines[row + 1][col - 1]) {
-                        count++;
-                    }
-                    if (row + 1 < 8 && landMines[row + 1][col]) {
-                        count++;
-                    }
-                    if (row + 1 < 8 && col + 1 < 10 && landMines[row + 1][col + 1]) {
-                        count++;
-                    }
-                    landMineCounts[row][col] = count;
-                    continue;
-                }
-                landMineCounts[row][col] = 0;
-            }
-        }
+        initializeGame();
         while (true) {
             System.out.println("   a b c d e f g h i j");
             for (int row = 0; row < 8; row++) {
@@ -156,6 +111,59 @@ public class MinesweeperGame {
                 System.out.println("잘못된 번호를 선택하셨습니다.");
             }
         }
+    }
+
+    private static void initializeGame() {
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 10; col++) {
+                board[row][col] = "□";
+            }
+        }
+        for (int i = 0; i < 10; i++) {
+            int col = new Random().nextInt(10);
+            int row = new Random().nextInt(8);
+            landMines[row][col] = true;
+        }
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 10; col++) {
+                int count = 0;
+                if (!landMines[row][col]) {
+                    if (row - 1 >= 0 && col - 1 >= 0 && landMines[row - 1][col - 1]) {
+                        count++;
+                    }
+                    if (row - 1 >= 0 && landMines[row - 1][col]) {
+                        count++;
+                    }
+                    if (row - 1 >= 0 && col + 1 < 10 && landMines[row - 1][col + 1]) {
+                        count++;
+                    }
+                    if (col - 1 >= 0 && landMines[row][col - 1]) {
+                        count++;
+                    }
+                    if (col + 1 < 10 && landMines[row][col + 1]) {
+                        count++;
+                    }
+                    if (row + 1 < 8 && col - 1 >= 0 && landMines[row + 1][col - 1]) {
+                        count++;
+                    }
+                    if (row + 1 < 8 && landMines[row + 1][col]) {
+                        count++;
+                    }
+                    if (row + 1 < 8 && col + 1 < 10 && landMines[row + 1][col + 1]) {
+                        count++;
+                    }
+                    landMineCounts[row][col] = count;
+                    continue;
+                }
+                landMineCounts[row][col] = 0;
+            }
+        }
+    }
+
+    private static void showGameStartComments() {
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        System.out.println("지뢰찾기 게임 시작!");
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
     }
 
     private static void open(int row, int col) {
